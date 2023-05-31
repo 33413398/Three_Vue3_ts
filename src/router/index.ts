@@ -19,6 +19,16 @@ const router = createRouter({
       name: 'line',
       component: () => import('@/views/LineView.vue')
     },
+    {
+      path: '/text',
+      name: 'text',
+      component: () => import('@/views/TextView.vue')
+    },
+    {
+      path: '/init3D',
+      name: 'init3D',
+      component: () => import('@/views/Init3D.vue')
+    },
   ]
 })
 

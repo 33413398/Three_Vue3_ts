@@ -10,7 +10,15 @@ const list = reactive([
   {
     name: '画线',
     link: '/line'
-  }
+  },
+  {
+    name: '创建文本',
+    link: '/text'
+  },
+  {
+    name: '载入3D模型',
+    link: '/init3D'
+  },
 ])
 </script>
 
