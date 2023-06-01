@@ -19,6 +19,10 @@ const list = reactive([
     name: '载入3D模型',
     link: '/init3D'
   },
+  {
+    name: '数据中心可视化系统',
+    link: '/DataCenterVisualizationSystem'
+  },
 ])
 </script>
 

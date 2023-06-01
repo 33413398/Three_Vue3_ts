@@ -34,7 +34,7 @@ if (WebGL.isWebGLAvailable()) {
 </script>
 
 <template>
-  <div class="lesson-one">
+  <div class="three-box">
 
   </div>
 </template>

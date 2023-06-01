@@ -6,7 +6,6 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js';
 import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
 
-const container = ref<HTMLDivElement | null>(null);
 onMounted(()=>{
   
 // 创建场景、相机和渲染器
@@ -43,5 +42,5 @@ const controls = new OrbitControls(camera, renderer.domElement);
 </script>
 
 <template>
-  <div ref="container"></div>
+  <div class="three-box"></div>
 </template>

@@ -29,6 +29,11 @@ const router = createRouter({
       name: 'init3D',
       component: () => import('@/views/Init3D.vue')
     },
+    {
+      path: '/DataCenterVisualizationSystem',
+      name: 'DataCenterVisualizationSystem',
+      component: () => import('@/views/DataCenterVisualizationSystem.vue')
+    },
   ]
 })
 
