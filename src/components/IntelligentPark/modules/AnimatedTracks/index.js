@@ -1,4 +1,4 @@
-import { Tween } from 'three/examples/jsm/libs/tween.module.js'
+import { TWEEN } from 'three/examples/jsm/libs/tween.module.min.js'
 import * as THREE from 'three'
 
 /**
@@ -10,7 +10,7 @@ export default class AnimatedTracks {
    * @param _model
    * @param _firstPosition
    */
-  constructor(_model, _viewer, _showLine, _callback, _rotationY = Math.PI / 2) {
+  constructor (_model, _viewer, _showLine, _callback, _rotationY = Math.PI / 2) {
     this.position = _model.position
     this.model = _model
     this.rotationY = _rotationY
@@ -30,7 +30,7 @@ export default class AnimatedTracks {
    * @param p2 点二
    * @param yu 分割阈值(米)
    */
-  spliceLine(p1, p2, yu = 0.5) {
+  spliceLine (p1, p2, yu = 0.5) {
     const positions = []
     const distance = p1.distanceTo(p2)
     const num = distance / yu
@@ -43,7 +43,7 @@ export default class AnimatedTracks {
     return positions
   }
 
-  drawLine([x, y, z]) {
+  drawLine ([x, y, z]) {
     if (!this.line) {
       const material = new THREE.LineBasicMaterial({
         color: 0x0000ff
@@ -65,31 +65,27 @@ export default class AnimatedTracks {
    * @param time 时间（毫秒）
    * @returns {*}
    */
-  insertTween(nextPoi, time = 5000) {
+  insertTween (nextPoi, time = 5000) {
     const nextPoiPosition = new THREE.Vector3(nextPoi[0], nextPoi[1], nextPoi[2])
     this.positionList.push(nextPoiPosition)
-    const tempTween = this.createTween(
-      this.model,
-      {
-        x: nextPoi[0],
-        y: nextPoi[1],
-        z: nextPoi[2]
-      },
-      time
-    )
+    const tempTween = this.createTween(this.model, {
+      x: nextPoi[0],
+      y: nextPoi[1],
+      z: nextPoi[2]
+    }, time)
     this.tweenList.push(tempTween)
     if (!this.isStart) tempTween.start() // 插入一个执行动画
   }
 
-  createTween(model, nextPoi, time, Easing = Tween.Easing.Linear.None) {
+  createTween (model, nextPoi, time, Easing = TWEEN.Easing.Linear.None) {
     const that = this
     // 初始化tween，设置变化对象
-    const tempTween = new Tween.Tween(that.position)
+    const tempTween = new TWEEN.Tween(that.position)
     // 设置变化函数
     tempTween.easing(Easing)
     tempTween.to(nextPoi, time)
     // 动画开始前计算角度
-    tempTween.onStart(() => {
+    tempTween.onStart(data => {
       const z = nextPoi.z - model.position.z
       const x = nextPoi.x - model.position.x
       const angle = Math.atan2(z, x)
@@ -97,7 +93,7 @@ export default class AnimatedTracks {
       // 判断是否启动动画
       that.isStart = true
     })
-    tempTween.onComplete((res) => {
+    tempTween.onComplete(res => {
       this.isStart = false
       that.positionList.forEach((poi, index) => {
         if (JSON.stringify(poi) === JSON.stringify(res)) that.listID = index
