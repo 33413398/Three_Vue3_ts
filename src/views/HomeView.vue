@@ -23,6 +23,10 @@ const list = reactive([
     name: '数据中心可视化系统',
     link: '/DataCenterVisualizationSystem'
   },
+  {
+    name: '智慧园区',
+    link: '/IntelligentPark'
+  },
 ])
 </script>
 

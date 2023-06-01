@@ -11,7 +11,7 @@ export default class ModelLoder {
   private gltfLoader: GLTFLoader;
   private dracoLoader: DRACOLoader;
 
-  constructor(viewer: Viewer, dracolPath: string = '/draco/') {
+  constructor(viewer: Viewer, dracolPath: string = '/IntelligentPark/draco/') {
     this.viewer = viewer;
     this.gltfLoader = new GLTFLoader();
     this.dracoLoader = new DRACOLoader();

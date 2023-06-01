@@ -34,6 +34,11 @@ const router = createRouter({
       name: 'DataCenterVisualizationSystem',
       component: () => import('@/views/DataCenterVisualizationSystem.vue')
     },
+    {
+      path: '/IntelligentPark',
+      name: 'IntelligentPark',
+      component: () => import('@/views/IntelligentPark.vue')
+    },
   ]
 })
 
