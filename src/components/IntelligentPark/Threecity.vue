@@ -594,6 +594,7 @@ $color: #123ca8;
 .scene {
   width: 100%;
   height: 100%;
+  font-size: 0.2rem;
 
 
   .label {
@@ -605,7 +606,7 @@ $color: #123ca8;
   }
 
   .jindu-con {
-    width: 300px;
+    width: 260px;
     height: 10px;
     border-radius: 50px;
     background-color: white;
