@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { onMounted, nextTick, ref } from "vue"
 // 导入整个 three.js核心库
 import * as THREE from 'three';
 import WebGL from "three/examples/jsm/capabilities/WebGL.js"
@@ -8,7 +9,12 @@ const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerH
 
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
-document.body.appendChild(renderer.domElement);
+const threeRef = ref<HTMLDivElement | null>()
+onMounted(() => {
+  nextTick(() => {
+    threeRef.value?.appendChild(renderer.domElement);
+  })
+})
 
 const geometry = new THREE.BoxGeometry(1, 1, 1);
 const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
@@ -34,7 +40,5 @@ if (WebGL.isWebGLAvailable()) {
 </script>
 
 <template>
-  <div class="three-box">
-
-  </div>
+  <div ref="threeRef" class="three-box"></div>
 </template>
