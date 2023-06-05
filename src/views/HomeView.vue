@@ -31,6 +31,10 @@ const list = reactive([
     name: '酷炫地球',
     link: '/earth'
   },
+  {
+    name: '生成地图建筑',
+    link: '/architecture'
+  },
 ])
 </script>
 
