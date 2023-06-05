@@ -27,6 +27,10 @@ const list = reactive([
     name: '智慧园区',
     link: '/IntelligentPark'
   },
+  {
+    name: '酷炫地球',
+    link: '/earth'
+  },
 ])
 </script>
 
