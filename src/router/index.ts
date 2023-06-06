@@ -49,6 +49,16 @@ const router = createRouter({
       name: 'architecture',
       component: () => import('@/views/Architecture.vue')
     },
+    {
+      path: '/characterMovement',
+      name: 'characterMovement',
+      component: () => import('@/views/CharacterMovement.vue')
+    },
+    {
+      path: '/LuminousScanning',
+      name: 'LuminousScanning',
+      component: () => import('@/views/LuminousScanning.vue')
+    },
   ]
 })
 

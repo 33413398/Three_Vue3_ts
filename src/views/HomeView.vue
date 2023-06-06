@@ -35,6 +35,14 @@ const list = reactive([
     name: '生成地图建筑',
     link: '/architecture'
   },
+  {
+    name: '移动人物模型',
+    link: '/characterMovement'
+  },
+  {
+    name: '模型发光扫描效果',
+    link: '/LuminousScanning'
+  },
 ])
 </script>
 
