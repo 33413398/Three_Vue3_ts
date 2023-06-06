@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, nextTick, ref } from "vue"
+import { onMounted, nextTick, ref,onUnmounted } from "vue"
 // 导入整个 three.js核心库
 import * as THREE from 'three';
 import WebGL from "three/examples/jsm/capabilities/WebGL.js"
@@ -8,6 +8,10 @@ import gsap from "gsap";
 import * as dat from "dat.gui";
 
 
+const domFlag = ref(true)
+onUnmounted(()=>{
+  domFlag.value = false
+})
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -133,5 +137,5 @@ folder.add(params, "fn").name("立方体运动");
 </script>
 
 <template>
-  <div ref="threeRef" class="three-box"></div>
+  <div ref="threeRef" class="three-box" v-if="domFlag"></div>
 </template>

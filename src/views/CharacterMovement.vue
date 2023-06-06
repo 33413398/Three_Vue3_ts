@@ -1,11 +1,18 @@
 <script setup lang="ts">
-import { onMounted, nextTick, ref } from "vue"
+import { onMounted, nextTick, ref, onUnmounted, onBeforeUnmount } from "vue"
 // 导入整个 three.js核心库
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
 import Stats from 'three/addons/libs/stats.module.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+const domFlag = ref(true)
+onBeforeUnmount(() => {
+  threeRef.value?.removeChild(stats.dom)
+  domFlag.value = false
+})
+
 let scene: any = null
 let renderer: any = null
 let camera: any = null
@@ -350,5 +357,5 @@ function animate() {
 </script>
 
 <template>
-  <div ref="threeRef" class="three-box"></div>
+  <div ref="threeRef" class="three-box" v-if="domFlag"></div>
 </template>
