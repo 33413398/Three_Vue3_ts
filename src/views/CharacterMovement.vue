@@ -7,7 +7,6 @@ import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
 import Stats from 'three/addons/libs/stats.module.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
-
 let scene: any = null
 let renderer: any = null
 let camera: any = null
@@ -15,10 +14,10 @@ let stats: any = null
 let model: any = null
 let skeleton: any = null
 let mixer: any = null
+// 该对象用于跟踪时间。如果performance.now可用，则 Clock 对象通过该方法实现，否则回落到使用略欠精准的Date.now来实现。
 let clock: any = null
 
 let crossFadeControls: any = [];
-
 
 let idleAction: any = null
 let walkAction: any = null
@@ -31,8 +30,6 @@ let settings: any = null
 let singleStepMode = false;
 let sizeOfNextStep = 0;
 
-
-
 const threeRef = ref<HTMLDivElement | null>()
 onMounted(() => {
   nextTick(() => {
@@ -40,25 +37,36 @@ onMounted(() => {
   })
 })
 
-
 function init() {
-
+  // 相机 -  透视相机
   camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 1000);
   camera.position.set(1, 2, - 3);
   camera.lookAt(0, 1, 0);
+  // 该对象用于跟踪时间
   clock = new THREE.Clock();
-
+  // 场景
   scene = new THREE.Scene();
+  // 背景色
   scene.background = new THREE.Color(0xa0a0a0);
+  // 这个类中的参数定义了线性雾。也就是说，雾的密度是随着距离线性增大的。
   scene.fog = new THREE.Fog(0xa0a0a0, 10, 50);
 
+  // 半球光
+  /* 
+  skyColor -（可选）一个表示颜色的 Color 的实例、字符串或数字，默认为一个白色（0xffffff）的 Color 对象。
+groundColor -（可选）一个表示颜色的 Color 的实例、字符串或数字，默认为一个白色（0xffffff）的 Color 对象。
+intensity -（可选）光照强度。默认值为 1。*/
   const hemiLight = new THREE.HemisphereLight(0xffffff, 0x8d8d8d);
   hemiLight.position.set(0, 20, 0);
   scene.add(hemiLight);
-
+  // 平行光
   const dirLight = new THREE.DirectionalLight(0xffffff);
   dirLight.position.set(- 3, 10, - 10);
+  /* 
+  此属性设置为 true 灯光将投射阴影。注意：这样做的代价比较高，
+  需要通过调整让阴影看起来正确。 查看 DirectionalLightShadow 了解详细信息。 默认值为 false。 */
   dirLight.castShadow = true;
+  // 下方为阴影参数
   dirLight.shadow.camera.top = 2;
   dirLight.shadow.camera.bottom = - 2;
   dirLight.shadow.camera.left = - 2;
@@ -67,11 +75,16 @@ function init() {
   dirLight.shadow.camera.far = 40;
   scene.add(dirLight);
 
-  const mesh = new THREE.Mesh(new THREE.PlaneGeometry(100, 100), new THREE.MeshPhongMaterial({ color: 0xcbcbcb, depthWrite: false }));
+  // 基础网格
+  const mesh = new THREE.Mesh(
+    // 平面缓冲几何体 
+    new THREE.PlaneGeometry(100, 100),
+    //Phong网格材质 种用于具有镜面高光的光泽表面的材质。
+    new THREE.MeshPhongMaterial({ color: 0xcbcbcb, depthWrite: false }));
   mesh.rotation.x = - Math.PI / 2;
   mesh.receiveShadow = true;
   scene.add(mesh);
-
+  // GLTF加载器 用于载入glTF 2.0资源的加载器。
   const loader = new GLTFLoader();
   loader.load('gltf/Soldier.glb', function (gltf) {
     model = gltf.scene;
@@ -127,24 +140,16 @@ function createPanel() {
     'make single step': toSingleStepMode,
     'modify step size': 0.05,
     'from walk to idle': function () {
-
       prepareCrossFade(walkAction, idleAction, 1.0);
-
     },
     'from idle to walk': function () {
-
       prepareCrossFade(idleAction, walkAction, 0.5);
-
     },
     'from walk to run': function () {
-
       prepareCrossFade(walkAction, runAction, 2.5);
-
     },
     'from run to walk': function () {
-
       prepareCrossFade(runAction, walkAction, 5.0);
-
     },
     'use default duration': true,
     'set custom duration': 3.5,
@@ -168,19 +173,14 @@ function createPanel() {
   folder4.add(settings, 'use default duration');
   folder4.add(settings, 'set custom duration', 0, 10, 0.01);
   folder5.add(settings, 'modify idle weight', 0.0, 1.0, 0.01).listen().onChange(function (weight: any) {
-
     setWeight(idleAction, weight);
-
   });
   folder5.add(settings, 'modify walk weight', 0.0, 1.0, 0.01).listen().onChange(function (weight: any) {
-
     setWeight(walkAction, weight);
 
   });
   folder5.add(settings, 'modify run weight', 0.0, 1.0, 0.01).listen().onChange(function (weight: any) {
-
     setWeight(runAction, weight);
-
   });
   folder6.add(settings, 'modify time scale', 0.0, 1.5, 0.01).onChange(modifyTimeScale);
 
@@ -339,6 +339,9 @@ function animate() {
   runWeight = runAction.getEffectiveWeight();
   updateWeightSliders();
   updateCrossFadeControls();
+  /* 
+  获取自 .oldTime 设置后到当前的秒数。 同时将 .oldTime 设置为当前时间。
+如果 .autoStart 设置为 true 且时钟并未运行，则该方法同时启动时钟。 */
   let mixerUpdateDelta = clock.getDelta();
   if (singleStepMode) {
     mixerUpdateDelta = sizeOfNextStep;

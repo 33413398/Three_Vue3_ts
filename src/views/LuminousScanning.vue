@@ -4,7 +4,9 @@ import { onMounted, nextTick, ref } from "vue"
 // 导入整个 three.js核心库
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+// 控制面板
 import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
+// 实时资源趋势
 import Stats from 'three/addons/libs/stats.module.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
@@ -15,7 +17,7 @@ import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js'
 import { uperVertext, uperFragment } from '../../public/LuminousScanning/shader/uperLineShader.js';
 import { bloomVertext, bloomFragment } from '../../public/LuminousScanning/shader/bloomShader.js';
 
-
+// 渲染器
 let renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 let scene = new THREE.Scene();
@@ -24,6 +26,7 @@ camera.position.set(0, 0, 100);
 camera.lookAt(0, 0, 0);
 let controls = new OrbitControls(camera, renderer.domElement);
 let threeRef = ref<HTMLDivElement | null>()
+// 着色器材质 - 
 let scanConfig = {
   value: 1.0,
   start: 0,
@@ -36,6 +39,7 @@ let scanConfig = {
 * 场景内部分模型辉光效果
 */
 let materials: any = {};
+// 基础网格材质  -- 这种材质不受光照的影响
 let darkMaterial = new THREE.MeshBasicMaterial({ color: '#000000' });
 
 
@@ -47,7 +51,12 @@ let bloomComposer: any = null;
 // 区分辉光与非辉光层
 const ENTIRE_SCENE = 0;
 const BLOOM_SCENE = 1;
+/* Layers 对象为 Object3D 分配 1个到 32 个图层。32个图层从 0 到 31 编号标记。
+在内部实现上，每个图层对象被存储为一个 bit mask， 默认的，所有 Object3D 对象都存储在第 0 个图层上。 
+图层对象可以用于控制对象的显示。当 camera 的内容被渲染时与其共享图层相同的物体会被显示。每个对象都需要与一个 camera 共享图层。
+ */
 const bloomLayer = new THREE.Layers();
+// 删除图层对象已有的所有对应关系，增加与参数指定的图层的对应关系。
 bloomLayer.set(BLOOM_SCENE);
 const bloomParams = {
   exposure: 1,
@@ -83,8 +92,9 @@ function init() {
 const renderBloom = function () {
   // 添加基本的渲染通道
   const renderPass = new RenderPass(scene, camera);
-
+// 辉光通道
   const bloomPass = new UnrealBloomPass(
+    // 二维向量
     new THREE.Vector2(window.innerWidth, window.innerHeight),
     1.5,
     0.4,
@@ -138,6 +148,11 @@ function renderEffect(model: any) {
     if (obj.name == '立方体') {
       // 将扫描框转为辉光材质
       obj.layers.toggle(BLOOM_SCENE);
+      /* 
+      着色器材质
+      要实现内置 materials 之外的效果。
+      将许多对象组合成单个BufferGeometry以提高性能。
+       */
       let shaderMaterial = new THREE.ShaderMaterial({
         transparent: true,
         side: THREE.DoubleSide,
@@ -147,10 +162,23 @@ function renderEffect(model: any) {
             value: new THREE.Vector4(0.0, 1.0, 1.0, 1.0),
           },
           uModelColor: {
+            // Vector4 四维向量  一个四维向量表示的是一个有顺序的、四个为一组的数字组合（标记为x、y和z）， 可被用来表示很多事物
+            /* 
+              一个位于四维空间中的点。
+              一个在四维空间中的方向与长度的定义。在three.js中，长度总是从(0, 0, 0, 0)到(x, y, z, w)的 
+              Euclidean distance（欧几里德距离，即直线距离）， 方向也是从(0, 0, 0, 0)到(x, y, z, w)的方向。
+              任意的、有顺序的、四个为一组的数字组合。
+              x - 向量的x值，默认为0。
+              y - 向量的y值，默认为0。
+              z - 向量的z值，默认为0。
+              w - 向量的w值，默认为1。
+            */
             value: new THREE.Vector4(0.0, 0.0, 0.0, 0.0),
           },
         },
+        // 顶点着色器的GLSL代码。这是shader程序的实际代码。  它也可以作为一个字符串直接传递或者通过AJAX加载。
         vertexShader: uperVertext,
+        // 片元着色器的GLSL代码。这是shader程序的实际代码.  它也可以作为一个字符串直接传递或者通过AJAX加载。
         fragmentShader: uperFragment,
       })
       obj.material = shaderMaterial;
