@@ -1,6 +1,6 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
-import { onMounted, nextTick, ref } from "vue"
+import { onMounted, nextTick, ref, onBeforeUnmount } from "vue"
 // 导入整个 three.js核心库
 import * as THREE from 'three';
 import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
@@ -19,6 +19,7 @@ let camera: any = null;
 let controls: any = null;
 let scene: any = null;
 let renderer: any = null;
+let gui: any = null
 function init() {
   scene = new THREE.Scene();
   // 若不为空，在渲染场景的时候将设置背景，且背景总是首先被渲染的。 可以设置一个用于的“clear”的Color（颜色）、
@@ -114,7 +115,7 @@ function init() {
   // 响应式匹配大小
   window.addEventListener('resize', onWindowResize);
   // GUI
-  const gui = new GUI();
+  gui = new GUI();
   gui.add(controls, 'screenSpacePanning');
 }
 
@@ -136,6 +137,10 @@ function animate() {
 function render() {
   renderer.render(scene, camera);
 }
+
+onBeforeUnmount(() => {
+  gui.domElement.remove()
+})
 </script>
 
 <template>

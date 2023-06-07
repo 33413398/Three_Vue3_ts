@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, nextTick, ref,onUnmounted } from "vue"
+import { onMounted, nextTick, ref,onBeforeUnmount } from "vue"
 // 导入整个 three.js核心库
 import * as THREE from 'three';
 import WebGL from "three/examples/jsm/capabilities/WebGL.js"
@@ -10,16 +10,12 @@ import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
 
-const domFlag = ref(true)
-onUnmounted(()=>{
-  domFlag.value = false
-})
 
 let mixer: any = null;
 // 该对象用于跟踪时间。
 const clock = new THREE.Clock();
 // 性能监测
-const stats = new Stats();
+const stats:any = new Stats();
 // 渲染器
 const renderer = new THREE.WebGLRenderer();
 // 设置设备像素比。
@@ -121,8 +117,9 @@ function animate() {
   // 渲染器渲染
   renderer.render(scene, camera);
 }
+
 </script>
 
 <template>
-  <div ref="threeRef" class="three-box" v-if="domFlag"></div>
+  <div ref="threeRef" class="three-box"></div>
 </template>

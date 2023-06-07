@@ -7,11 +7,6 @@ import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
 import Stats from 'three/addons/libs/stats.module.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
-const domFlag = ref(true)
-onBeforeUnmount(() => {
-  threeRef.value?.removeChild(stats.dom)
-  domFlag.value = false
-})
 
 let scene: any = null
 let renderer: any = null
@@ -111,10 +106,10 @@ function init() {
   controls.target.set(0, 1, 0);
   controls.update();
 }
-
+let panel: any = null
 function createPanel() {
 
-  const panel = new GUI({ width: 310 });
+  panel = new GUI({ width: 310 });
 
   const folder1 = panel.addFolder('Visibility');
   const folder2 = panel.addFolder('Activation/Deactivation');
@@ -354,8 +349,11 @@ function animate() {
   renderer.render(scene, camera);
 }
 
+onBeforeUnmount(() => {
+  panel.domElement.remove()
+})
 </script>
 
 <template>
-  <div ref="threeRef" class="three-box" v-if="domFlag"></div>
+  <div ref="threeRef" class="three-box"></div>
 </template>
