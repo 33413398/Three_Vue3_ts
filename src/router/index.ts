@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 
@@ -63,6 +64,11 @@ const router = createRouter({
       path: '/ModelShadow',
       name: 'ModelShadow',
       component: () => import('@/views/ModelShadow.vue')
+    },
+    {
+      path: '/crystalBall',
+      name: 'crystalBall',
+      component: () => import('@/views/crystalBall.vue')
     },
   ]
 })

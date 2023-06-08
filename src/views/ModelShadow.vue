@@ -140,13 +140,16 @@ loader.load('gltf/Xbot.glb', function (gltf) {
         //subclip 创建一个新的片段，仅包含所给定帧之间的原始剪辑片段。
         clip = THREE.AnimationUtils.subclip(clip, clip.name, 2, 3, 30);
       }
+      // 返回所传入的剪辑参数的AnimationAction, 根对象参数可选，默认值为混合器的默认根对象。第一个参数可以是动画剪辑(AnimationClip)对象或者动画剪辑的名称。
       const action = mixer.clipAction(clip);
       activateAction(action);
       additiveActions[name].action = action;
       allActions.push(action);
     }
   }
+  // 创建面板
   createPanel();
+  // 实时渲染
   animate();
 });
 // 动画相关方法

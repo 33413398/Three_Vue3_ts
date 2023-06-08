@@ -47,6 +47,10 @@ const list = reactive([
     name: '人物模型投影',
     link: '/ModelShadow'
   },
+  {
+    name: '水晶球',
+    link: '/crystalBall'
+  },
 ])
 </script>
 
