@@ -59,6 +59,11 @@ const router = createRouter({
       name: 'LuminousScanning',
       component: () => import('@/views/LuminousScanning.vue')
     },
+    {
+      path: '/ModelShadow',
+      name: 'ModelShadow',
+      component: () => import('@/views/ModelShadow.vue')
+    },
   ]
 })
 

@@ -43,6 +43,10 @@ const list = reactive([
     name: '模型发光扫描效果',
     link: '/LuminousScanning'
   },
+  {
+    name: '人物模型投影',
+    link: '/ModelShadow'
+  },
 ])
 </script>
 
