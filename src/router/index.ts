@@ -70,6 +70,11 @@ const router = createRouter({
       name: 'crystalBall',
       component: () => import('@/views/crystalBall.vue')
     },
+    {
+      path: '/TestReview',
+      name: 'TestReview',
+      component: () => import('@/views/TestReview.vue')
+    },
   ]
 })
 

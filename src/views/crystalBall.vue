@@ -25,6 +25,7 @@ let stats: any = null
 let gui: any = null
 let conf: any = null
 
+// 三维向量
 const v0 = new THREE.Vector3();
 
 const threeRef = ref<HTMLDivElement | null>()

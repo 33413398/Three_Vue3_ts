@@ -51,6 +51,10 @@ const list = reactive([
     name: '水晶球',
     link: '/crystalBall'
   },
+  {
+    name: '复习',
+    link: '/TestReview'
+  }
 ])
 </script>
 
